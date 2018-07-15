@@ -1,0 +1,54 @@
+приложение-поисковик фотографий с Unsplash.com
+
+Перед началом:
+1. Устанавливаем Python3.6 (если не было) https://www.python.org/downloads/release/python-366/
+2. Устанавливаем Pycharm Community https://www.jetbrains.com/pycharm/
+3. Настраиваем под себя, туториал https://www.jetbrains.com/help/pycharm/quick-start-guide.html
+4. Устанавливаем SQLite (локальная мини-бд) https://www.sqlite.org/docs.html
+5. Устанавливаем Flask http://flask.pocoo.org/
+
+Почитать про REST можно здесь https://habr.com/post/38730/
+Документация к API Unsplash.com здесь https://unsplash.com/documentation
+
+
+Что нужно сделать:
+1. Зарегистрироваться на сайте unsplash и создать application в demo-режиме https://unsplash.com/oauth/applications
+
+2. Создать приложение на фреймворке Flask
+
+3. Создать route для страницы поиска фотографий с полем поиска по ключевым словам
+
+4. При обращении к странице без ключевого слова отрисовать страницу с приглашением что-нибудь поискать
+(шаблон страницы можно скачать например здесь https://colorlib.com/wp/template/po-portfolio/)
+как подключить статику http://flask.pocoo.org/docs/1.0/quickstart/#static-files
+
+5. При введении ключевого слова обратиться к API поиска unsplash.com, отрисовать страницу с результатами поиска,
+ у каждой фотографии должны быть кнопки "сохранить в избранное".
+ >> GET  /api/image/<keyword>
+
+6. Создать route для сохранения в избранное, обрабатывающий обращения с методом POST, принимающий ID фотографии
+и обращающийся к API unsplash.com чтобы получить ссылку на фото, тэги и имя автора, после чего сохраняющий их в sqlite
+работа с базой http://flask.pocoo.org/docs/1.0/tutorial/database/
+>> GET /api/image/<id>
+
+7. При нажатии кнопки "сохранить в избранное" должен выполняться ajax-запрос с методом POST на route добавления в избранное,
+статья как подключить здесь http://w3.org.ua/jquery/podklyuchenie-biblioteki-jquery-4-sposoba/,
+статья с примером POST-запроса здесь https://habr.com/post/42426/
+>> POST /api/image/favorites/<id>
+
+8. Создать route просмотра списка избранного, отрисовывающий страницу списка с избранными фотографиями,
+ их тэгами и авторами, а также кнопкой "удалить из избранного"
+ >> GET /api/image/favorites
+
+9. Создать route для удаления из избранного, обрабатывающий метод DELETE и выполняющий sql-запрос,
+ удаляющий фото из таблицы избранного.
+
+
+ИЛИ
+
+можно создать телеграм-бота, показывающим первые 3 фотографии по результатам поиска
+пример здесь https://tproger.ru/translations/telegram-bot-create-and-deploy/
+
+Спасибо Роскомнадзору, обращаться к API Telegram сейчас приходится через прокси,
+поэтому придётся добавить к каждому обращению использование прокси,
+что можно сделать вот примерно так https://stackoverflow.com/questions/12601316/how-to-make-python-requests-work-via-socks-proxy
