@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, url_for, json, redirect
+from flask import render_template, url_for, json, redirect, flash
 from app.forms import SearchForm
 import requests
 
@@ -14,21 +14,26 @@ SECRET_KEY = '5b5604f792805ee3e5fe48770490d325114cacb6a243b689a0e895d2b8a65876'
 URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
     if form.validate_on_submit():
-        keyword = SearchForm.search.data
+        keyword = form.search.data
         if keyword is not None:
-            return redirect('/api/image/'+keyword)
+            return redirect(url_for('blog'))
+        else:
+            flash("No any keyword")
+    else:
+        flash('No validation')
+    form.search.data = ''
     return render_template('index.html', title='Unsplash search', form=form)
 
 
 @app.route('/api/image/<string:keyword>', methods=['GET'])
 def search_image(keyword):
     headers = {'Authorization': 'Client-ID {access_token}'.format(access_token=ACCESS_KEY)}
-    url = API_URL + ADD_URL + '?per_page=' + PER_PAGE + '&query=' + keyword
+    url = API_URL + ADD_URL + '?per_page=' + str(PER_PAGE) + '&query=' + keyword
     request_result = requests.get(url=url, headers=headers)
     result = request_result.json()  # или можно json.loads(request_result.text)
     response = app.response_class(
@@ -43,4 +48,8 @@ def search_image(keyword):
 def save_image():
     pass
 
+
+@app.route('/login')
+def login():
+    pass
 
