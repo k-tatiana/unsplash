@@ -1,11 +1,12 @@
-from app import app
+# -*- coding: utf-8 -*-
+from app import app, db
 from flask import render_template, url_for, json, redirect, flash
 from app.forms import SearchForm
 import requests
+from app.models import Images
+from urllib.parse import unquote
 
 #auth:
-USER = 't1nka'
-PASS = 'tinkaunsplash'
 API_URL = 'https://api.unsplash.com'
 ADD_URL = '/search/photos'
 PER_PAGE = 100
@@ -21,16 +22,14 @@ def index():
     if form.validate_on_submit():
         keyword = form.search.data
         if keyword is not None:
-            return redirect(url_for('blog'))
+            return redirect(url_for('search_image', keyword=keyword))
         else:
             flash("No any keyword")
-    else:
-        flash('No validation')
     form.search.data = ''
     return render_template('index.html', title='Unsplash search', form=form)
 
 
-@app.route('/api/image/<string:keyword>', methods=['GET'])
+@app.route('/api/image/<string:keyword>', methods=['GET', 'POST'])
 def search_image(keyword):
     headers = {'Authorization': 'Client-ID {access_token}'.format(access_token=ACCESS_KEY)}
     url = API_URL + ADD_URL + '?per_page=' + str(PER_PAGE) + '&query=' + keyword
@@ -41,15 +40,24 @@ def search_image(keyword):
         status=200,
         mimetype='application/json'
     )
-    return response
+    return render_template('keyword.html', title='Images', entries=result['results'])
 
 
-@app.route('/api/image/<int:id>', methods=['POST'])
-def save_image():
-    pass
+@app.route('/api/image/favorites/add/<string:image_url>', methods=['GET', 'POST'])
+def save_image(image_url):
+    Images.add_image(image_url)
+    db.session.commit()
 
 
-@app.route('/login')
-def login():
-    pass
+@app.route('/api/image/favorites/delete', methods=['POST'])
+def delete_image(image_url, charset='utf-8'):
+    Images.remove_image(unquote(image_url))
+    db.session.commit()
+
+
+@app.route('/favorites')
+def favorites():
+    images = Images.favorites
+    return render_template('favorites.html', favotites=images, title='Favorite images')
+
 

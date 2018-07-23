@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="nav-bar-sep d-lg-none"></div>
+<div class="outer-container home-page">
+    <div class="container-fluid">
+        {% for image in images %}
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-3 no-padding">
+                <div class="portfolio-content">
+                    <figure>
+                        <p style="margin-left: 100px"><img src="{{ image.url }}" alt="">
+                    </figure>
+                    <br> <p style="margin-left: 100px">{{ image.image_desc }}
+                </div><!-- .portfolio-content -->
+            </div><!-- .col -->
+        </div><!-- .row -->
+        {% endfor %}
+    </div><!-- .container-fluid -->
+</div><!-- .outer-container -->
+
+{% endblock %}

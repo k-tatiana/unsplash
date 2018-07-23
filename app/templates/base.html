@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{title}} - Unsplash project</title>
+    {% else %}
+    <title>Unsplash project</title>
+    {%endif%}
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css') }}">
+
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/font-awesome.min.css') }}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="site-header">
+    <div class="site-branding">
+        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home"><img src="{{url_for('static', filename='images/logo-try.png') }}" alt="Logo"></a></h1>
+    </div><!-- .site-branding -->
+
+    <div class="hamburger-menu">
+        <div class="menu-icon">
+            <img src="{{url_for('static', filename='images/menu-icon.png') }}" alt="menu icon">
+        </div><!-- .menu-icon -->
+
+        <div class="menu-close-icon">
+            <img src="{{url_for('static', filename='images/x.png') }}" alt="menu close icon">
+        </div><!-- .menu-close-icon -->
+    </div><!-- .hamburger-menu -->
+</header><!-- .site-header -->
+
+<nav class="site-navigation flex flex-column">
+    <div class="site-branding d-none d-lg-block ">
+        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home"><img src="{{url_for('static', filename='images/logo-try2.png') }}" alt="Logo"></a></h1>
+    </div><!-- .site-branding -->
+
+    <ul class="main-menu flex flex-column justify-content-center">
+        <li class="current-menu-item"><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+
+    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+        All rights reserved | This template is made by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+    </p>
+
+</nav><!-- .site-navigation -->
+
+<div>
+    <p style="margin-left: 100px">Unsplash Search Project:
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('favorites')}}">Favorites</a>
+</div>
+
+    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>
+                        <p style="margin-left: 100px">
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                    {% endif %}
+    {% endwith %}
+
+
+    {% block content %} {% endblock %}
+
+</body>
+</html>
