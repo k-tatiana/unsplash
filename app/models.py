@@ -3,16 +3,17 @@ from app import db
 class Images(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String, index=True, unique=True)
-    image_desc = db.Column(db.String(255)),
-    favorites = db.Column(db.Boolean, default=False)
+    image_desc = db.Column(db.String(255))
 
-    def add_image(self, image_url):
-        if self.favorites == False:
-            self.favorites = True
+    def __repr__(self):
+        return '<Image {}>'.format(self.image_desc)
 
-    def remove_image(self, image_url):
-        if self.favorites == True:
-            self.favorites = False
 
-    def select_favorites(self):
-        images = Images.query.filter_by(favorites=True)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
