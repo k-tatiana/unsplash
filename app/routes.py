@@ -14,7 +14,7 @@ PER_PAGE = 100
 ACCESS_KEY = '6bf8a59262a3b7b30b735c0abf99721529f1ecb028d04d10ea7a0468400a0816'
 SECRET_KEY = '5b5604f792805ee3e5fe48770490d325114cacb6a243b689a0e895d2b8a65876'
 URI = 'urn:ietf:wg:oauth:2.0:oob'
-#config.FAVORITE = Images.query.all()
+config.FAVORITE = Images.query.all()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,9 +39,14 @@ def search_image(keyword):
     result = request_result.json()  # или можно json.loads(request_result.text)
     config.SEARCH_RESULT = result['results']
     config.SEARCH_HIST.append(config.SEARCH_RESULT)
+
     print(config.FAVORITE)
+    id_list = []
+    for entry in config.FAVORITE:
+        id_list.append(entry.image_id)
+    print(id_list)
     return render_template('keyword.html', title='Images',
-                           entries=config.SEARCH_RESULT, favorite=config.FAVORITE)
+                           entries=config.SEARCH_RESULT, favorite=id_list)
 
 
 @app.route('/api/image/favorites/add', methods=['POST', 'GET'])

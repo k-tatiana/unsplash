@@ -16,9 +16,6 @@ class Images(db.Model):
         self.image_desc = image_desc
         self.image_full = image_full
 
-    def __repr__(self):
-        return '<Image {}>'.format(self.image_desc)
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -19,23 +19,15 @@
                         <input type="hidden" name="image_url" value="{{ entry.urls.small }}">
                         <input type="hidden" name="image_full" value="{{ entry.urls.full }}">
                         <input type="hidden" name="description" value="{{ entry.description }}">
-                        '{{ favorite.image_url }}'
-                        '{{ entry.urls.small }}'
-                        {% if favorite %}
-                            {% for img in favorite %}
-                                {% if favorite.image_url == entry.urls.small %}
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="submit" value="Удалить из избранного">
-                                {% endif %}
-                            {% endfor %}
+                        {% if entry.id in favorite %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="submit" value="Удалить из избранного">
                         {% else %}
                             <input type="hidden" name="action" value="add">
                             <input type="submit" value="Добавить в избранное">
                         {% endif %}
                     </form>
-                        <ul class="flex flex-wrap justify-content-center">
-                            <!--<li><a href="{{ url_for('delete_image', image_url=entry.urls.small) }}">Удалить из избранного</a></li>-->
-                        </ul>
+                        <ul class="flex flex-wrap justify-content-center"></ul>
                     </div><!-- .entry-content -->
                 </div><!-- .portfolio-content -->
             </div><!-- .col -->
