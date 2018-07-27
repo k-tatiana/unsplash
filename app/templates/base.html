@@ -61,8 +61,10 @@
 
 <div>
     <p style="margin-left: 100px">Unsplash Search Project:
-    <a href="{{url_for('index')}}">Home</a>
-    <a href="{{url_for('favorites')}}">Favorites</a>
+    <a href="{{url_for('index')}}">Домашняя страница</a>
+    <a href="{{url_for('login')}}">Логин</a>
+    <a href="{{url_for('favorites')}}">Избранное</a>
+    <a href="{{url_for('last_search')}}">Последний поиск</a>
 </div>
 
     {% with messages = get_flashed_messages() %}

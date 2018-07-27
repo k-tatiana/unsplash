@@ -13,10 +13,17 @@
                         <p style="margin-left: 100px"><img src="{{ entry.urls.small }}" alt="">
                     </figure>
                     <br> <p style="margin-left: 100px">{{ entry.description }}
-
                     <div class="entry-content flex flex-column align-items-center justify-content-center">
-                        <a href="{{ url_for('save_image', image_url = entry.urls.small)}}">Добавить в избранное</a>
-
+                    <form method="post" action="/api/image/favorites/add">
+                        <!--<a href="{{ url_for('save_image', image_url = '') }}{{ entry.urls.small|map('wrap')|e }}">Добавить в избранное</a>-->
+                        <input type="hidden" name="image_url" value="{{ entry.urls.small }}">
+                        <input type="hidden" name="image_desc" value = "{{ entry.description }}">
+                        {% if favorite.image_url == entry.urls.small %}
+                            <input type="submit" value="Удалить из избранного">
+                        {% else %}
+                            <input type="submit" value="Добавить в избранное">
+                        {% endif %}
+                    </form>
                         <ul class="flex flex-wrap justify-content-center">
                             <li><a href="{{ url_for('delete_image', image_url=entry.urls.small) }}">Удалить из избранного</a></li>
                         </ul>

@@ -5,6 +5,7 @@ from app.forms import SearchForm
 import requests
 from app.models import Images
 from urllib.parse import unquote
+import config
 
 #auth:
 API_URL = 'https://api.unsplash.com'
@@ -35,29 +36,45 @@ def search_image(keyword):
     url = API_URL + ADD_URL + '?per_page=' + str(PER_PAGE) + '&query=' + keyword
     request_result = requests.get(url=url, headers=headers)
     result = request_result.json()  # или можно json.loads(request_result.text)
-    response = app.response_class(
-        response=json.dumps(result),
-        status=200,
-        mimetype='application/json'
-    )
-    return render_template('keyword.html', title='Images', entries=result['results'])
+    config.SEARCH_RESULT = result['results']
+    config.SEARCH_HIST.append(config.SEARCH_RESULT)
+    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT)
 
 
-@app.route('/api/image/favorites/add/<string:image_url>', methods=['GET', 'POST'])
-def save_image(image_url):
-    Images.add_image(image_url)
+@app.route('/api/image/favorites/add', methods=['POST', 'GET'])
+def save_image():
+    """Получаем запрос на добавление картинки, добавляем в базу новую картинку,
+    отрисовываем фронт с изменением текста кнопки"""
+    from flask import request
+    img = Images(request.form['image_url'], request.form['description'])
+    db.session.add(img)
     db.session.commit()
+    favorite = Images.query.all()
+    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=favorite['image_url'])
 
 
 @app.route('/api/image/favorites/delete', methods=['POST'])
-def delete_image(image_url, charset='utf-8'):
-    Images.remove_image(unquote(image_url))
+def delete_image():
+    from flask import request
+    img = Images.query.filter_by(image_url=request.form['image_url']).first_or_404()
+    db.session.delete(img)
     db.session.commit()
+    favorite = Images.query.all()
+    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=favorite['image_url'])
 
 
 @app.route('/favorites')
 def favorites():
     images = Images.favorites
-    return render_template('favorites.html', favotites=images, title='Favorite images')
+    form = SearchForm()
+    return render_template('favorites.html', title='Favorites', form=form)
+
+@app.route('/last_search')
+def last_search():
+    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT)
+
+@app.route('/login')
+def login():
+    pass
 
 
