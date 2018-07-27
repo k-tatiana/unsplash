@@ -10,4 +10,4 @@ class Config(object):
 
 SEARCH_RESULT = dict()
 SEARCH_HIST = list()
-FAVORITE = dict()
+FAVORITE = []

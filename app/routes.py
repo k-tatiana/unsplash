@@ -2,9 +2,9 @@
 from app import app, db
 from flask import render_template, url_for, json, redirect, flash
 from app.forms import SearchForm
-import requests
-from app.models import Images
+from app.models import Images, User
 from urllib.parse import unquote
+import requests
 import config
 
 #auth:
@@ -14,6 +14,7 @@ PER_PAGE = 100
 ACCESS_KEY = '6bf8a59262a3b7b30b735c0abf99721529f1ecb028d04d10ea7a0468400a0816'
 SECRET_KEY = '5b5604f792805ee3e5fe48770490d325114cacb6a243b689a0e895d2b8a65876'
 URI = 'urn:ietf:wg:oauth:2.0:oob'
+#config.FAVORITE = Images.query.all()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -38,7 +39,9 @@ def search_image(keyword):
     result = request_result.json()  # или можно json.loads(request_result.text)
     config.SEARCH_RESULT = result['results']
     config.SEARCH_HIST.append(config.SEARCH_RESULT)
-    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT)
+    print(config.FAVORITE)
+    return render_template('keyword.html', title='Images',
+                           entries=config.SEARCH_RESULT, favorite=config.FAVORITE)
 
 
 @app.route('/api/image/favorites/add', methods=['POST', 'GET'])
@@ -46,11 +49,16 @@ def save_image():
     """Получаем запрос на добавление картинки, добавляем в базу новую картинку,
     отрисовываем фронт с изменением текста кнопки"""
     from flask import request
-    img = Images(request.form['image_url'], request.form['description'])
-    db.session.add(img)
+    img = {'image_id': request.form['image_id'], 'image_url': request.form['image_url'],
+           'image_desc': request.form['description'], 'image_full': request.form['image_full']}
+    imgs = Images(**img)
+    db.session.add(imgs)
     db.session.commit()
-    favorite = Images.query.all()
-    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=favorite['image_url'])
+    config.FAVORITE = Images.query.all()
+    return render_template('keyword.html',
+                           title='Images',
+                           entries=config.SEARCH_RESULT,
+                           favorite=config.FAVORITE)
 
 
 @app.route('/api/image/favorites/delete', methods=['POST'])
@@ -60,14 +68,13 @@ def delete_image():
     db.session.delete(img)
     db.session.commit()
     favorite = Images.query.all()
-    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=favorite['image_url'])
+    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=config.FAVORITE['image_url'])
 
 
 @app.route('/favorites')
 def favorites():
-    images = Images.favorites
-    form = SearchForm()
-    return render_template('favorites.html', title='Favorites', form=form)
+    images = Images.query.all()
+    return render_template('favorites.html', title='Favorites', images=images)
 
 @app.route('/last_search')
 def last_search():
@@ -75,6 +82,5 @@ def last_search():
 
 @app.route('/login')
 def login():
-    pass
-
-
+    return redirect('portfolio.html'#, form=form
+                    )
