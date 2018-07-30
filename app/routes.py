@@ -78,8 +78,8 @@ def delete_image():
         id_list.append(entry.image_id)
     # print(id_list)
     rout = request.form['form_base'] + '.html'
-    return render_template(rout, title='Images',
-                           entries=config.SEARCH_RESULT, favorite=id_list)
+    return render_template(rout, title='Favorites',
+                           entries=id_list)
 
 
 @app.route('/favorites')
