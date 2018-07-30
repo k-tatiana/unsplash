@@ -39,12 +39,11 @@ def search_image(keyword):
     result = request_result.json()  # или можно json.loads(request_result.text)
     config.SEARCH_RESULT = result['results']
     config.SEARCH_HIST.append(config.SEARCH_RESULT)
-
-    print(config.FAVORITE)
+    #print(config.FAVORITE)
     id_list = []
     for entry in config.FAVORITE:
         id_list.append(entry.image_id)
-    print(id_list)
+    #print(id_list)
     return render_template('keyword.html', title='Images',
                            entries=config.SEARCH_RESULT, favorite=id_list)
 
@@ -60,26 +59,34 @@ def save_image():
     db.session.add(imgs)
     db.session.commit()
     config.FAVORITE = Images.query.all()
-    return render_template('keyword.html',
-                           title='Images',
-                           entries=config.SEARCH_RESULT,
-                           favorite=config.FAVORITE)
-
+    id_list = []
+    for entry in config.FAVORITE:
+        id_list.append(entry.image_id)
+    # print(id_list)
+    return render_template('keyword.html', title='Images',
+                           entries=config.SEARCH_RESULT, favorite=id_list)
 
 @app.route('/api/image/favorites/delete', methods=['POST'])
 def delete_image():
     from flask import request
-    img = Images.query.filter_by(image_url=request.form['image_url']).first_or_404()
+    img = Images.query.filter_by(image_id=request.form['image_id']).first()
     db.session.delete(img)
     db.session.commit()
-    favorite = Images.query.all()
-    return render_template('keyword.html', title='Images', entries=config.SEARCH_RESULT, favorite=config.FAVORITE['image_url'])
+    config.FAVORITE = Images.query.all()
+    id_list = []
+    for entry in config.FAVORITE:
+        id_list.append(entry.image_id)
+    # print(id_list)
+    rout = request.form['form_base'] + '.html'
+    return render_template(rout, title='Images',
+                           entries=config.SEARCH_RESULT, favorite=id_list)
 
 
 @app.route('/favorites')
 def favorites():
-    images = Images.query.all()
-    return render_template('favorites.html', title='Favorites', images=images)
+    config.FAVORITE = Images.query.all()
+    return render_template('favorites.html', title='Images',
+                           entries=config.FAVORITE)
 
 @app.route('/last_search')
 def last_search():
@@ -87,5 +94,4 @@ def last_search():
 
 @app.route('/login')
 def login():
-    return redirect('portfolio.html'#, form=form
-                    )
+    return redirect('portfolio.html')

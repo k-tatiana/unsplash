@@ -848,6 +848,8 @@ a:hover, a:active {
     margin-bottom: 0;
     font-size: 1.5rem;
     font-weight: 400;
+    margin-left: 100px;
+
 }
 
 .post-comments .comment-list {
@@ -944,6 +946,7 @@ a:hover, a:active {
 
 .comment-reply-title {
     margin-bottom: 16px;
+    align: "left"
 }
 
 .comment-form input[type="text"],
@@ -961,6 +964,7 @@ a:hover, a:active {
 
 .comment-form textarea {
     line-height: 1.4;
+
 }
 
 .comment-form input[type="text"]:focus,

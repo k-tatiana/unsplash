@@ -4,22 +4,23 @@
 
 <div class="nav-bar-sep d-lg-none"></div>
 
-<div class="outer-container home-page">
+<div class="outer-container home-page"  style = "padding: 0; margin-left: 100px">
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-md-6 col-lg-3 no-padding">
                 <div class="search-control">
-                    <hr>
-                    <form class="form-search" method="post" action="" novalidate>
-                        {{ form.hidden_tag() }}
-                        <p style="margin-left: 100px">
-                            {{ form.search.label }}
-                            {{ form.search(size=32) }}
-                        </p>
-                        <p style="margin-left: 100px">
-                            {{ form.submit() }}
-                        </p>
+                    <form  method="post" action="" novalidate>
+                        <div class="comments-form">
+                            <div class="comment-respond">
+                                {{ form.hidden_tag() }}
+                                <br>
+                                   <h3 class="comment-reply-title">{{ form.search.label }}</h3>
+                                    {{ form.search(size=32) }}
+                                <br>
+                                    {{ form.submit() }}
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -29,7 +30,6 @@
             <div class="col-12 col-md-6 col-lg-3 no-padding">
                 <div class="portfolio-content">
                     <figure>
-                        <p style="margin-left: 100px">
                             <img src="{{url_for('static', filename='images/') }}{{stap}}.jpg" alt="">
                         <!-- para preguntar a como hacerlo correcto -->
                     </figure>

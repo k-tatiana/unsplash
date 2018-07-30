@@ -20,11 +20,15 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+
+    <style>
+        "margin-left: 100px">
+    </style>
 </head>
 <body>
 <header class="site-header">
     <div class="site-branding">
-        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home">\
+        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home">
             <img src="{{url_for('static', filename='images/logo-try.png') }}" alt="Logo"></a></h1>
     </div><!-- .site-branding -->
 
@@ -41,15 +45,14 @@
 
 <nav class="site-navigation flex flex-column">
     <div class="site-branding d-none d-lg-block ">
-        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home"><img src="{{url_for('static', filename='images/logo-try2.png') }}" alt="Logo"></a></h1>
+        <h1 class="site-title"><a href="{{url_for('index')}}" rel="home">
+            <img src="{{url_for('static', filename='images/logo-try2.png') }}" alt="Logo"></a></h1>
     </div><!-- .site-branding -->
 
     <ul class="main-menu flex flex-column justify-content-center">
-        <li class="current-menu-item"><a href="{{url_for('index')}}">Home</a></li>
-        <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="{{url_for('index')}}">Домашняя</a></li>
+        <li><a href="{{url_for('login')}}">Логин</a></li>
+        <li><a href="{{url_for('favorites')}}">Избранное</a></li>
     </ul>
 
     <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -60,13 +63,7 @@
 
 </nav><!-- .site-navigation -->
 
-<div>
-    <p style="margin-left: 100px">Unsplash Search Project:
-    <a href="{{url_for('index')}}">Домашняя страница</a>
-    <a href="{{url_for('login')}}">Логин</a>
-    <a href="{{url_for('favorites')}}">Избранное</a>
-    <a href="{{url_for('last_search')}}">Последний поиск</a>
-</div>
+<div class="nav-bar-sep d-lg-none"></div>
 
     {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -82,7 +79,11 @@
     {% endwith %}
 
 
-    {% block content %} {% endblock %}
+ {% block content %} {% endblock %}
+
+
+<script type='text/javascript' src="{{url_for('static', filename='js/jquery.js') }}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/custom.js') }}"></script>
 
 </body>
 </html>
